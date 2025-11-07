@@ -25,11 +25,10 @@ jobs:
           DEFAULT_BRANCH: main
           # keep the assignment's focus: Python
           VALIDATE_PYTHON: true
-          # keep plain markdown linting if you want, but disable prettier
+          # keep plain markdown linting incase i want to disable prettier
           VALIDATE_MARKDOWN: true
           VALIDATE_MARKDOWN_PRETTIER: false
           # disable the Zizmor workflow linter to avoid blocking
           VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
-          # optional: also disable the general GH Actions linter if it nags
           # VALIDATE_GITHUB_ACTIONS: false
 
