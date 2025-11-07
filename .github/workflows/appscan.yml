@@ -6,15 +6,21 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   scan:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Run AppScan CodeSweep
-        uses: HCL-TECH-SOFTWARE/appscan-codesweep-action@v1.0.1
+      - name: Run HCL AppScan CodeSweep
+        uses: HCL-TECH-SOFTWARE/appscan-codesweep-action@v1
         with:
           fail-on-severity: high
