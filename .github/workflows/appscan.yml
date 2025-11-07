@@ -6,21 +6,19 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-  security-events: write
-
 jobs:
   scan:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # required for CodeSweep diffing
 
-      - name: Run HCL AppScan CodeSweep
-        uses: HCL-TECH-SOFTWARE/appscan-codesweep-action@v1
+      - name: Run AppScan CodeSweep
+        uses: HCL-TECH-SOFTWARE/appscan-codesweep-action@v2.1
         with:
-          fail-on-severity: high
+          # Optional: make the check fail if issues are found
+          status: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
