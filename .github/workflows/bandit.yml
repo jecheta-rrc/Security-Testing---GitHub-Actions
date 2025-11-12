@@ -1,4 +1,4 @@
-name: Bandit Security Scan
+name: Multi-Language Security Scan
 
 on:
   push:
@@ -7,28 +7,61 @@ on:
     branches: [ "main" ]
 
 jobs:
-  bandit:
+  security-scan:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1 - Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2 - Set up Python for Bandit
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      # Step 3 - Install and run Bandit (Python)
       - name: Install Bandit
         run: pip install bandit
 
-      - name: Run Bandit and generate report
+      - name: Run Bandit Security Scan
         run: |
+          echo "🔍 Running Bandit..."
           bandit -r . -f json -o bandit-report.json || true
           bandit -r . -ll || true
 
-      - name: Upload Bandit report artifact
+      - name: Upload Bandit Report
         uses: actions/upload-artifact@v4
         with:
           name: bandit-report
           path: bandit-report.json
+
+      # Step 4 - Set up Java for Dependency or AppScan
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # You can use 11 or 21 depending on your assignment
+
+      # Step 5 - Verify Java version
+      - name: Verify Java
+        run: java -version
+
+      # Step 6 - Optional: Run OWASP Dependency-Check
+      - name: Run OWASP Dependency-Check
+        run: |
+          echo "🔍 Running OWASP Dependency Check..."
+          ./dependency-check/bin/dependency-check.sh \
+            --project "Assignment4" \
+            --scan "." \
+            --out "odc-report" \
+            --format "HTML" \
+            --nvdApiKey ${{ secrets.NVD_API_KEY }} || true
+
+      - name: Upload Dependency-Check Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: odc-report
+
