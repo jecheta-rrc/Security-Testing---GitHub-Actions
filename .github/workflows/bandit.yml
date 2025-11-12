@@ -1,4 +1,4 @@
-name: Multi-Language Security Scan
+name: Bandit Security Scan
 
 on:
   push:
